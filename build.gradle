@@ -1,0 +1,139 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.5'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.diffplug.spotless' version '6.20.0'
+}
+
+group = 'prj.yong'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+subprojects {
+    group = 'prj.yong'
+    version = '0.0.1-SNAPSHOT'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'com.diffplug.spotless'
+
+    tasks.withType(Jar) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
+    spotless {
+        java {
+            importOrder 'java', 'jakarta', 'javax', 'org', 'com', ''
+            removeUnusedImports()
+            googleJavaFormat('1.17.0').aosp()
+            indentWithSpaces(4)
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+        format 'misc', {
+            target '**/*.yml', '**/*.gradle', '**/*.md', '**/*.gitignore'
+            targetExclude '.gitlab-ci.yml'
+            indentWithSpaces(2)
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+    }
+
+    build {
+        dependsOn spotlessApply
+    }
+
+    ext {
+        springCloudVersion = '2023.0.1'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+
+    dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+        implementation 'org.apache.commons:commons-lang3:3.12.0'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'org.wiremock:wiremock-standalone:3.3.1'
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+    }
+}
+
+bootJar { enabled = false }
+jar { enabled = false }
+
+project(':product') {
+    bootJar { enabled = true }
+    jar { enabled = false }
+    dependencies {
+        implementation project(':common')
+    }
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events 'passed', 'failed', 'skipped'
+        }
+    }
+}
+
+project(':price') {
+    bootJar { enabled = true }
+    jar { enabled = false }
+    dependencies {
+        implementation project(':common')
+    }
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events 'passed', 'failed', 'skipped'
+        }
+    }
+}
+
+project(':stock') {
+    bootJar { enabled = true }
+    jar { enabled = false }
+    dependencies {
+        implementation project(':common')
+    }
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events 'passed', 'failed', 'skipped'
+        }
+    }
+}

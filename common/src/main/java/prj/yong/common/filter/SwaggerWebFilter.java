@@ -2,6 +2,7 @@ package prj.yong.common.filter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +20,6 @@ import prj.yong.common.constants.SwaggerWhiteIpConstants;
 import prj.yong.common.util.IpUtility;
 import reactor.core.publisher.Mono;
 
-import java.util.Map;
-
 @Slf4j
 @Configuration
 public class SwaggerWebFilter {
@@ -36,13 +35,17 @@ public class SwaggerWebFilter {
                             || requestPath.startsWith("/webjars/swagger-ui/")
                             || requestPath.startsWith("/v3/api-docs/");
 
-            if(isSwaggerPath) {
+            if (isSwaggerPath) {
                 String clientIpAddress =
                         request.getHeaders().getFirst(HttpRequestHeaderConstants.X_FORWARDED_FOR);
 
-                if(ObjectUtils.isEmpty(clientIpAddress)
-                        || IpUtility.isAllowClientIpAddress(SwaggerWhiteIpConstants.swaggerWhiteIpList, clientIpAddress)) {
-                    log.error("Blocked Swagger access from IP address ({}) to Swagger UI: {}", clientIpAddress, requestPath);
+                if (ObjectUtils.isEmpty(clientIpAddress)
+                        || IpUtility.isAllowClientIpAddress(
+                                SwaggerWhiteIpConstants.swaggerWhiteIpList, clientIpAddress)) {
+                    log.error(
+                            "Blocked Swagger access from IP address ({}) to Swagger UI: {}",
+                            clientIpAddress,
+                            requestPath);
                     return this.handleSwaggerUnauthorizedAccess(exchange);
                 }
             }
@@ -57,19 +60,24 @@ public class SwaggerWebFilter {
 
         response.setStatusCode(httpStatus);
 
-        Map<String, String> errorDetails = Map.of(
-                "error", httpStatus.getReasonPhrase(),
-                "message", "Swagger access is not allowed."
-        );
+        Map<String, String> errorDetails =
+                Map.of(
+                        "error",
+                        httpStatus.getReasonPhrase(),
+                        "message",
+                        "Swagger access is not allowed.");
 
-        try{
+        try {
             byte[] errorDetailsBytes = new ObjectMapper().writeValueAsBytes(errorDetails);
             DataBuffer dataBuffer = response.bufferFactory().wrap(errorDetailsBytes);
             response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
             return response.writeWith(Mono.just(dataBuffer));
-        }catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             log.error("Failed to serialize error response", e);
-            return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to serialize error response"));
+            return Mono.error(
+                    new ResponseStatusException(
+                            HttpStatus.INTERNAL_SERVER_ERROR,
+                            "Failed to serialize error response"));
         }
     }
 }

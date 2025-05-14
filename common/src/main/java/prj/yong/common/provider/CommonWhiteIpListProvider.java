@@ -2,6 +2,6 @@ package prj.yong.common.provider;
 
 import java.util.List;
 
-public interface CommonWhiteIpProvider {
+public interface CommonWhiteIpListProvider {
     List<String> getWhiteIpList(String requestPath);
 }

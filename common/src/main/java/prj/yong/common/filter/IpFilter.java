@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.server.ResponseStatusException;
 import prj.yong.common.constants.HttpRequestHeaderConstants;
-import prj.yong.common.provider.CommonWhiteIpProvider;
+import prj.yong.common.provider.CommonWhiteIpListProvider;
 import prj.yong.common.util.IpUtility;
 
 @Slf4j
@@ -19,11 +19,11 @@ public class IpFilter extends AbstractGatewayFilterFactory<IpFilter.IpFilterConf
 
     public static class IpFilterConfig {}
 
-    private final CommonWhiteIpProvider commonWhiteIpProvider;
+    private final CommonWhiteIpListProvider commonWhiteIpListProvider;
 
-    public IpFilter(CommonWhiteIpProvider commonWhiteIpProvider) {
+    public IpFilter(CommonWhiteIpListProvider commonWhiteIpListProvider) {
         super(IpFilter.IpFilterConfig.class);
-        this.commonWhiteIpProvider = commonWhiteIpProvider;
+        this.commonWhiteIpListProvider = commonWhiteIpListProvider;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class IpFilter extends AbstractGatewayFilterFactory<IpFilter.IpFilterConf
             String clientIpAddress =
                     request.getHeaders().getFirst(HttpRequestHeaderConstants.X_FORWARDED_FOR);
 
-            List<String> whiteIpList = commonWhiteIpProvider.getWhiteIpList(requestPath);
+            List<String> whiteIpList = commonWhiteIpListProvider.getWhiteIpList(requestPath);
 
             if (ObjectUtils.isEmpty(clientIpAddress)
                     || ObjectUtils.isEmpty(whiteIpList)

@@ -2,7 +2,7 @@ package prj.yong.common.enums;
 
 public enum SpringProfileEnum {
     LOCAL("local"),
-    DEVELOP("devvelop"),
+    DEVELOP("develop"),
     STAGE("stage"),
     PRODUCTION("production");
 

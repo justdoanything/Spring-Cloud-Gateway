@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import prj.yong.common.constants.HttpRequestHeaderConstants;
-import prj.yong.common.constants.SwaggerWhiteIpConstants;
+import prj.yong.common.constants.SwaggerConstants;
 import prj.yong.common.util.IpUtility;
 import reactor.core.publisher.Mono;
 
@@ -41,7 +41,7 @@ public class SwaggerWebFilter {
 
                 if (ObjectUtils.isEmpty(clientIpAddress)
                         || IpUtility.isAllowClientIpAddress(
-                                SwaggerWhiteIpConstants.swaggerWhiteIpList, clientIpAddress)) {
+                                SwaggerConstants.whiteIpListForSwagger, clientIpAddress)) {
                     log.error(
                             "Blocked Swagger access from IP address ({}) to Swagger UI: {}",
                             clientIpAddress,

@@ -34,7 +34,7 @@ public class HmacSha256Filter
     private final CommonHmacSha256Properties commonHmacSha256Properties;
 
     @Setter(value = AccessLevel.PROTECTED)
-    private String templateUrl;
+    private String urlTemplate;
 
     @Setter(value = AccessLevel.PROTECTED)
     private String shopName;
@@ -67,7 +67,7 @@ public class HmacSha256Filter
                     request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
             long requestHeaderContentLength = request.getHeaders().getContentLength();
 
-            if (StringUtils.isBlank(this.templateUrl)
+            if (StringUtils.isBlank(this.urlTemplate)
                     || StringUtils.isBlank(this.shopName)
                     || StringUtils.isBlank(requestHeaderAuthorization)
                     || requestHeaderContentLength <= 0) {
@@ -79,7 +79,7 @@ public class HmacSha256Filter
                     .flatMap(
                             dataBuffer -> {
                                 PathPattern.PathMatchInfo pathMatchInfo =
-                                        UriUtility.parsingPath(requestPath, templateUrl);
+                                        UriUtility.parsingPath(requestPath, urlTemplate);
 
                                 if (pathMatchInfo == null
                                         || ObjectUtils.isEmpty(pathMatchInfo.getUriVariables())
@@ -103,7 +103,7 @@ public class HmacSha256Filter
                                 log.debug(
                                         "Proceed to compare request and signature:"
                                                 + "\n- Request Path: {}"
-                                                + "\n- Template URL: {}"
+                                                + "\n- URL Template: {}"
                                                 + "\n- Shop Name: {}"
                                                 + "\n- Country: {}"
                                                 + "\n- Content Length: {}"
@@ -111,7 +111,7 @@ public class HmacSha256Filter
                                                 + "\n- Authorization: {}"
                                                 + "\n- Signature: {}",
                                         requestPath,
-                                        this.templateUrl,
+                                        this.urlTemplate,
                                         this.shopName,
                                         country,
                                         requestHeaderContentLength,

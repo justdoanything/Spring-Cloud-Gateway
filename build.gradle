@@ -101,6 +101,7 @@ project(':product') {
     jar { enabled = false }
     dependencies {
         implementation project(':common')
+        implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.2.0'
     }
     test {
         useJUnitPlatform()
@@ -115,6 +116,7 @@ project(':price') {
     jar { enabled = false }
     dependencies {
         implementation project(':common')
+        implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.2.0'
     }
     test {
         useJUnitPlatform()
@@ -129,6 +131,7 @@ project(':stock') {
     jar { enabled = false }
     dependencies {
         implementation project(':common')
+        implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.2.0'
     }
     test {
         useJUnitPlatform()

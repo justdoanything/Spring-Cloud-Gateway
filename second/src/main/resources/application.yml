@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: second
+  profiles:
+    default: local
+
+server:
+  port: 6000
+
+logging:
+  pattern:
+    console: "[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-3level] %logger{36} >>> %msg%n"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: develop
+
+---
+spring:
+  config:
+    activate:
+      on-profile: stage
+
+---
+spring:
+  config:
+    activate:
+      on-profile: production

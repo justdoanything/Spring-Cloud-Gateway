@@ -1,6 +1,0 @@
-server:
-  port: 5200
-
-logging:
-  level:
-    root: DEBUG

@@ -1,7 +1,0 @@
-package prj.yong.common.properties;
-
-public interface CommonHmacSha256Properties {
-    record ApplicationKeyConfig(String applicationKey, String applicationSecret) {}
-
-    String createSignature(String category, String type, String bodyString);
-}

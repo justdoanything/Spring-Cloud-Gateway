@@ -1,6 +1,5 @@
 rootProject.name = 'Spring-Cloud-Gateway'
 
 include 'common'
-include 'product'
-include 'price'
-include 'stock'
+include 'first'
+include 'second'

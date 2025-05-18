@@ -1,0 +1,18 @@
+server:
+  port: 5200
+
+logging:
+  level:
+    root: INFO
+    prj.yong.second: DEBUG
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        # Route Health Check
+        - id: route-health-check
+          uri: no://op
+          predicates:
+            - Path=/health
+            - Method=GET

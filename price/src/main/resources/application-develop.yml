@@ -1,8 +1,0 @@
-logging:
-  level:
-    root: DEBUG
-
-swagger:
-  authorization:
-    headers: X-Api-Key, X-Forwarded-For
-

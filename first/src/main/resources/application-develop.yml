@@ -1,0 +1,9 @@
+logging:
+  level:
+    root: INFO
+    prj.yong.first: DEBUG
+
+swagger:
+  authorization:
+    headers: X-Api-Key, X-Forwarded-For
+
